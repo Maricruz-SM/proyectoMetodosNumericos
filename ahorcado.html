@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="esp">
+    <head>
+        <meta charset="UTF-8">
+        <title> Practica 1 - Unidad 2</title>
+    </head>
+    <body>
+        <div class ="contenedor">
+            <h2>Método de Bisección: El ahorcado</h2>
+            <div id="pista"></div>
+            <canvas id="pizarron" width ="200" height="200">
+            </canvas>
+            <div id="palabra"></div>
+            <div id="mensaje"></div>
+            <div id="teclado" class="teclas"></div>
+            <button id="resert" onclick="iniciarJuego()">
+                Nueva Palabra
+            </button>
+        </div>
+
+        <script>
+            //arreglo para palabras y pistas
+            const baseDeDatos = [
+                {palabra: "TECLADO", pista: "Dispositivo de entrada"},
+                {palabra: "PYTHON", pista: "Lenguaje e programación"},
+                {palabra: "GATO", pista: "Animal felino"},
+                {palabra: "Veracruz", pista: "Estado de la republica"},
+                {palabra: "NAHUATL", pista: "Lengua indigena"},
+                {palabra: "JUPETER", pista: "Planeta del sistema solar"}
+            ];
+
+            //variables
+            let secreta, pistaActual, adivinadas, fallos;
+
+            const ctx = document.getElementById ("pizarron").getContext("2d");
+
+            //Lógica del juego
+            function iniciarJuego(){
+                const item = baseDeDatos[Math.floor(Math.random() * baseDeDatos.length)];
+                secreta = item.palabra;
+                pistaActual = item.pista;
+
+                adivinadas =[];
+                fallos = 0;
+                
+                document.getElementById("pista").innerText = "pista: " + pistaActual;
+                document.getElementById("mensaje").innerText= "";
+
+                ctx.clearRect(0,0,200,200);
+
+                dibujarHorcado();
+                generarTeclado();
+                actualizarInterfaz();
+            }
+            function  generarTeclado(){
+            const teclado = document.getElementById("teclado");
+            teclado.innerHTML = "";
+
+            "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("").forEach(letra=> {
+                const btn = document.createElement("button");
+                btn.innerText = letra;
+
+                btn.onclick = () =>{
+                    btn.disabled = true;
+                    procesarLetra(letra);
+                }
+                teclado.appendChild(btn);
+            });
+
+        }
+
+        //Función para procesar las letras
+        function  procesarLetra(letra){
+            //ciclo if
+            if(secreta.includes(letra)){
+                adivinadas.push(letra);
+            }else{
+                fallos++;
+                dibujarCuerpo();
+            }
+            actualizarInterfaz();
+        }
+
+        //función para actualizar interfaz
+        function actualizarInterfaz(){
+            //dibujar guiones o letras
+            const visual = secreta.split("").map(l => adivinadas.includes(l) ? l : "_").join(" ");
+            document.getElementById("palabra").innerText = visual;
+
+            //condición de ganar o perder
+            if(!visual.includes("_")) finalizar("felicidades", "#3BFA00")
+            if (fallos > 6) finalizar("Error: la palabra era "+secreta,"#FA4F00")
+        }
+    //Bloquear el sistema
+    function finalizar(msg, color){
+        document.getElementById("mensaje").innerText = msg;
+          document.getElementById("mensaje").style.color = color;
+//Desabilitar las teclas restantes
+          document.querySelectorAll(".teclas button").forEach(
+            b=>b.disabled = true );
+
+    }
+    //función para dibujar la estrucctura estatica
+    function dibujarHorcado(){
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#69290C";
+        ctx.beginPath();
+        ctx.moveTo(20,180); ctx.lineTo(180,180);
+        ctx.moveTo(50,180); ctx.lineTo(50,20);
+        ctx.lineTo(120,20); ctx.lineTo(120,40);
+        ctx.stroke();
+    }
+
+    //función para dibujar el cuerpo
+    function dibujarCuerpo(){
+        ctx.beginPath();
+        //por cada fallo ndibujar un cacho del cuerpo
+        if(fallos==1){ctx.arc(120,60,20,0,7);}//cabeza
+        if(fallos==2){ctx.moveTo(120,80); ctx.lineTo(120,140);}//tronco
+        if(fallos==3){ctx.moveTo(120,90); ctx.lineTo(90,120);}//brazo izq
+        if(fallos==4){ctx.moveTo(120,90); ctx.lineTo(150,120);}//brazo dere
+        if(fallos==5){ctx.moveTo(120,140); ctx.lineTo(90,170);}//pie izq
+        if(fallos==6){ctx.moveTo(120,140); ctx.lineTo(150,170);}//pie dere
+        ctx.stroke();
+
+    }
+     
+    iniciarJuego();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name= "viewport" content="while=device-width, initial-scale=1.0">
+    <title>Practica 9</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="container py-5 bg-light  text-center">
+    <div class="card mx-auto" style="max-width: 600px;">
+        <div class = "card-body">
+            <h3 class = "card title">Metodos de multiples pasos</h3>
+            <p>Predicción del clima con el método de Adams-Bashforth</p>
+            <div class="row g-2 mb-3 text-start">
+                <div class="col-4"><!--Primer  historial-->
+                    <label>Clima hace una hora:</label>
+                    <input type="number" id="p1">
+                </div>
+
+                <div class="col-4"><!--Segundo historial-->
+                    <label>Clima hace media hora:</label>
+                    <input type="number" id="p2">
+                </div>
+
+                <div class="col-4"><!--Tercer historial-->
+                    <label>Clima actualmente:</label>
+                    <input type="number" id="p3">
+                </div>
+            </div>
+            <button class = "btn btn-primary" onclick="calcularClima()">
+                Predecir clima
+            </button>
+        </div class= "alert alert-info py-3">
+        <h5>Clima predecido: <strong id="idClima">
+        </strong></h5>
+        <h4 id = "condicionEsperada" class = "mt-2">---</h4>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calcularClima(){
+        let hora1 = parseFloat(document.getElementById("p1").value);
+        let hora2 = parseFloat(document.getElementById("p2").value);
+        let hora3 = parseFloat(document.getElementById("p3").value);
+
+        let historial = [hora1, hora2, hora3];
+        let cambio1 = historial[1]-historial[0];
+        let cambio2 = historial[2]-historial[1];
+        
+        //aplicar metodo de miltiples pasos
+        let cambioFinal = (1.5 * cambio2 )+ (0.5 * cambio1);
+        //predecir el siguente cambio de clima
+        let climaFuturo=historial[2] + cambioFinal;
+        //Mostrar los resultados
+        document.getElementById("idClima").innerText = climaFuturo.toFixed(1);
+        let targetaCondicion = document.getElementById("condicionEsperada");
+        if(cambioFinal < 20){
+            targetaCondicion.innerText = "Se esperan tormentas";     
+        }else if (cambioFinal > 30){
+            targetaCondicion.innerText = "Clima soleado";
+        }else{
+            targetaCondicion.innerText = "Clima inestable";
+        }
+    } 
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es"></html>
+<head>
+    <meta charset ="UTM_8">
+    <meta mane ="viewport" content="width=device-wiidth, initial-scale= 1.0">
+    <title>Calculadora de errores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="card shadrow p-4 mx-auto" style="max-width: 500px;">
+            <h3 class="text center mb-4">Calculadora de errores en JS</h3>
+            <div class="mb-3">
+                <label class="form laber">valor real:</label>
+                <input type ="number" id="real" class="form_contrl">
+            </div>
+             <div class="mb-3">
+                <label class="form laber">valor aproximado:</label>
+                <input type ="number" id="aprox" class="form_contrl">
+            </div>
+            <button onclick="calcular()" class="btn btn-primary w-100">CALCULAR ERRORES</button>
+            <div id="resultados" class=""mt-4 d-none>
+                <h5>resultados</h5>
+                <p>El error absoluto:<strong id ="ea"></strong></p>
+                 <p>El error relativo:<strong id ="er"></strong></p> 
+                  <p>El error relativo  porcentual es:<strong id ="ep"></strong></p>
+                  <did id="status "class="alert mt-2"></did>
+                
+            </div>
+        </div>
+
+    </div>
+    <script> 
+       function calcular() {
+    const vReal = parseFloat(document.getElementById('real').value);
+    const vAprox = parseFloat(document.getElementById('aprox').value);
+
+    const ea = Math.abs(vReal - vAprox);
+    
+    if (vReal !== 0) {
+        er = ea / Math.abs(vReal);
+        ep = er * 100;
+    }
+
+    document.getElementById('resultados').classList.remove('d-none');
+    document.getElementById('ea').innerText = ea.toFixed(6);
+    document.getElementById('er').innerText = er.toFixed(6);
+    document.getElementById('ep').innerText = ep.toFixed(4) + "%";
+}
+        
+        
+    </script>
+
+</body>
